@@ -7,6 +7,8 @@ RUN npm run build
 
 # When Dockerfile runs into a FROM, it knows to start kinda a new phase/stage
 FROM nginx
+# Expose port 80, i.e. the container will listen to port 80
+EXPOSE 80
 # Copy the folder /app/build from the phase/stage above (from = 0) 
 # to a folder in nginx container. Which folder? 
 # From https://hub.docker.com/_/nginx, for the purpose of hosting some simple static content,
