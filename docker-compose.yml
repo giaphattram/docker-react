@@ -1,0 +1,31 @@
+version: '3'
+services:
+    web:
+        # This is just to prevent React app from existing when starting with docker-compose
+        # https://stackoverflow.com/questions/60790696/react-scripts-start-exiting-in-docker-foreground-cmd
+        stdin_open: true
+        # If we use the conventional dockerfile name, then we just need build: .
+        # But here we have a custom dockerfile name, we need to specify context and dockerfile 
+        build: 
+            # context specifies the directory for the files and folders of this image
+            context: .
+            dockerfile: Dockerfile.dev
+        ports: 
+            - "3000:3000" 
+        volumes:
+            # Do not map /app/node_modules inside the container to anything outside
+            - /app/node_modules
+            # map the entire current directory in local file system to folder /app inside container
+            - .:/app
+    # start a separate container for the sole purpose of testing
+    # take advantage of docker volumes to more easily add tests to App.test.js in local file system
+    # which will be mapped automatically to the container
+    tests:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        volumes:
+            - /app/node_modules
+            - .:/app
+        # specify a command to run as soon as the container is started
+        command: ["npm", "run", "test"]
