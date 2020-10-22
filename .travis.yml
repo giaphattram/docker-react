@@ -20,3 +20,20 @@ script:
     # To override this so that the test terminates after finishing running,
     # use '-e CI=true'
     - docker run -e CI=true nicktr91/docker-react npm run test
+
+deploy:
+    provider: elasticbeanstalk
+    region: "eu-central-1"
+    app: "docker"
+    env: "Docker-env"
+    # Tell Travis CI which AWS S3 bucket to upload the project to (after completing the tests)
+    bucket_name: "elasticbeanstalk-eu-central-1-750023457732"
+    # path name inside the bucket. A folder for this project will only be created
+    # after first deploy, but essentially it will have the same name with app name
+    bucket_path: "docker"
+    # Telling Travis to deploy only when the new commit is on master branch
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key:
+        secure: "$AWS_SECRET_KEY"
