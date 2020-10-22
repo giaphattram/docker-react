@@ -18,5 +18,5 @@ script:
     # The default behaviour of 'npm run test' is, after running test, presents us
     # with a list of commands to interact.
     # To override this so that the test terminates after finishing running,
-    # use '-- --coverage'
-    - docker run nicktr91/docker-react npm run test -- --coverage
+    # use '-e CI=true'
+    - docker run -e CI=true nicktr91/docker-react npm run test
