@@ -1,0 +1,22 @@
+# https://docs.docker.com/engine/reference/run/#env-environment-variables
+language: generic
+
+# any time we use Docker we need superuser permission
+sudo: required
+
+services:
+    # tell Travis CI we need a copy of docker
+    - docker
+
+# Tell Travis CI what to do before we deploy project or run tests
+before_install:
+    # Use Dockerfile.dev, not Dockerfile which deploys nginx server for production 
+    - docker build -t nicktr91/docker-react -f Dockerfile.dev .
+
+# Tell Travis CI to run the test 
+script:
+    # The default behaviour of 'npm run test' is, after running test, presents us
+    # with a list of commands to interact.
+    # To override this so that the test terminates after finishing running,
+    # use '-- --coverage'
+    - docker run nicktr91/docker-react npm run test -- --coverage
